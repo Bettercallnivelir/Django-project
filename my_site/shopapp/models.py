@@ -12,6 +12,15 @@ class Product(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     archived = models.BooleanField(default=False)
 
+    def __str__(self):
+        return self.name
+
+    # @property
+    # def description_short(self):
+    #     if len(self.descriptions) < 40:
+    #         return self.descriptions
+    #     return self.descriptions[:40] + '...'
+
 
 class Order(models.Model):
     delivery_address = models.TextField(null=True, blank=True)
@@ -19,3 +28,6 @@ class Order(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(User, on_delete=models.PROTECT)
     products = models.ManyToManyField(Product, related_name='orders')
+
+    def __str__(self):
+        return f'Заказ №{self.pk}-{self.delivery_address}'
