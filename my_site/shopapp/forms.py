@@ -25,7 +25,7 @@ class OrderForm(forms.ModelForm):
     """Форма для модели Order"""
     class Meta:
         model = Order
-        fields = 'user', 'delivery_address', 'promocode', 'products',
+        fields = 'delivery_address', 'promocode', 'products',
         labels = {
             'delivery_address': gettext_lazy('Адрес доставки'),
             'products': gettext_lazy('Выберите один или несколько продуктов'),
