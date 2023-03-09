@@ -21,7 +21,9 @@
     </div>
   {% else %}
     <h2>No orders!</h2>
-
   {% endif %}
+    <div>
+    <a href="{% url 'shopapp:create_order' %}">ТУт можно сделать заказ!</a>
+  </div>
 
 {% endblock %}

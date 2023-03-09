@@ -44,7 +44,7 @@ class ThrottlingMiddleware:
 
     TIME_LIMIT (int): Временной лимит по запросам (в секундах)
     """
-    __TIME_LIMIT = 3
+    __TIME_LIMIT = 0
 
     def __init__(self, get_response):
         self.get_response = get_response
