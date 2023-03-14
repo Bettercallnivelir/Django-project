@@ -1,0 +1,28 @@
+{% extends 'shopapp/base.html' %}
+
+{% block title %}
+  Product #{{ object.pk }}
+{% endblock %}
+
+{% block body %}
+  <h1>Product: {{ object }}</h1>
+  <div>
+    <p>Description: <em>{{ object.descriptions }}</em></p>
+    <p>Price: <em>{{ object.price }}</em></p>
+    <p>Discount: <em>{{ pobject.discount }}</em></p>
+    <p>Archived: <em>{{ object.archived }}</em></p>
+  </div>
+  <br>
+  <div>
+    <a href="{% url 'shopapp:update_product' product.pk %}">Update product</a>
+  </div>
+  <br>
+  <div>
+    <a href="{% url 'shopapp:delete_product' product.pk %}">Delete this product</a>
+  </div>
+  <br>
+  <div>
+    <a href="{% url 'shopapp:products' %}">Back to products list</a>
+  </div>
+
+{% endblock %}

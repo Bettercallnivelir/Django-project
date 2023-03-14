@@ -6,9 +6,10 @@
 
 {% block body %}
   <h1>Orders:</h1>
-  {% if orders %}
+  {% if object_list %}
     <div>
-      {% for order in orders %}
+      {% for order in object_list %}
+        <p><a href="{% url 'shopapp:order_detail' order.pk %}">Order #{{ order.pk }}</a></p>
         <p>Order by: {% firstof order.user.username order.user.first_name %}</p>
         <p>Promo: <code>({{ order.promocode }})</code></p>
         <p>Delivery address: {{ order.delivery_address }}</p>
@@ -17,13 +18,15 @@
             <li>{{ product.name }} ${{ product.price }}</li>
           {% endfor %}
         </ul>
+        <br>
       {% endfor %}
+
     </div>
   {% else %}
     <h2>No orders!</h2>
   {% endif %}
-    <div>
-    <a href="{% url 'shopapp:create_order' %}">ТУт можно сделать заказ!</a>
+  <div>
+    <a href="{% url 'shopapp:create_order' %}"><b>Оформить заказ!</b></a>
   </div>
 
 {% endblock %}
