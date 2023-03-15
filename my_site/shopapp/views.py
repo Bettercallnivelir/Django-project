@@ -1,77 +1,126 @@
-from timeit import default_timer
-
 from django.contrib.auth.models import Group, User
-from django.shortcuts import render, redirect, reverse
-from django.http import HttpResponse, HttpRequest
+from django.shortcuts import render, redirect, reverse, get_object_or_404
+from django.http import HttpResponse, HttpRequest, HttpResponseRedirect
+from django.urls import reverse_lazy
+from django.views import View
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
-from shopapp.forms import ProductForm, OrderForm
+from shopapp.forms import ProductForm, OrderForm, GroupForm
 from shopapp.models import Product, Order
 
 # Create your views here.
 url_names = ['index', 'groups', 'products', 'orders']
 
 
-def shop_index(request: HttpRequest):
-    context = {
-        'urls': url_names,
-    }
-    return render(request, 'shopapp/shop-index.html', context=context)
+class ShopIndexView(View):
+    """View списка ссылок приложения"""
+    def get(self, request: HttpRequest) -> HttpResponse:
+        context = {
+            'urls': url_names,
+        }
+        return render(request, 'shopapp/shop-index.html', context=context)
 
 
-def groups_list(request: HttpRequest):
-    data = {
-        'groups': Group.objects.prefetch_related('permissions').all()
-    }
-    return render(request, 'shopapp/groups-list.html', context=data)
+class GroupsListView(View):
+    """View списка групп"""
+    def get(self, request):
+        data = {
+            'groups': Group.objects.prefetch_related('permissions').all(),
+            'form': GroupForm(),
+        }
+        return render(request, 'shopapp/groups-list.html', context=data)
+
+    def post(self, request: HttpRequest):
+        form = GroupForm(request.POST)
+        if form.is_valid():
+            form.save()
+
+        return redirect(request.path)
 
 
-def products_list(request: HttpRequest):
-    data = {
-        'products': Product.objects.all()
-    }
-    return render(request, 'shopapp/products-list.html', context=data)
+class ProductsDetailsView(DetailView):
+    """View детальное описание продукта"""
+    model = Product
+    template_name = 'shopapp/product-details.html'
 
 
-def orders_list(request: HttpRequest):
-    data = {
-        'orders': Order.objects.select_related('user').prefetch_related('products').all()
-    }
-    return render(request, 'shopapp/orders-list.html', context=data)
+class ProductListView(ListView):
+    """View списка продуктов"""
+    model = Product
+    context_object_name = 'products'
+    queryset = Product.objects.filter(archived=False)
 
 
-def create_product(request: HttpRequest):
-    if request.method == 'POST':
+class CreateProductView(View):
+    """View создяния продукта"""
+    def get(self, request: HttpRequest):
+        """Обработка Get-запроса. Получаем форму на создание продукта"""
+        context = {
+            'form': ProductForm()
+        }
+        return render(request, 'shopapp/create_product.html', context=context)
+
+    def post(self, request: HttpRequest):
+        """Обработка POST-запроса. Создаём продукт"""
         form = ProductForm(request.POST)
         if form.is_valid():
-            # Product.objects.create(**form.cleaned_data) # если форма не связана с моделью
             form.save()
-            url = reverse('shopapp:products')
-            return redirect(url)
-    else:
-        form = ProductForm()
-
-    context = {
-        'form': form
-    }
-
-    return render(request, 'shopapp/create_product.html', context=context)
+        return redirect('shopapp:products')
 
 
-def create_order(request: HttpRequest):
-    """Функция создания заказа через форму OrderForm"""
-    if request.method == 'POST':
-        form = OrderForm(request.POST)
-        if form.is_valid():
-            order = form.save(commit=False)
-            order.user = User.objects.first()
-            form.save()
-            url = reverse('shopapp:orders')
-            return redirect(url)
-    else:
-        form = OrderForm()
+class ProductUpdateView(UpdateView):
+    """View Обновление деталей продукта"""
+    model = Product
+    fields = 'name', 'price'
+    template_name_suffix = '_update_form'
 
-    context = {
-        'form': form
-    }
+    def get_success_url(self):
+        return reverse('shopapp:detail_product', kwargs={'pk': self.object.pk})
 
-    return render(request, 'shopapp/create_order.html', context=context)
+
+class ProductDeleteView(DeleteView):
+    """View удаления продукта"""
+    model = Product
+    template_name_suffix = '_soft_delete'
+    success_url = reverse_lazy('shopapp:products')
+
+    def form_valid(self, form):
+        """Меняем значение параметра 'archived'(софт-удаление)"""
+        success_url = self.get_success_url()
+        self.object.archived = True
+        self.object.save()
+        return HttpResponseRedirect(success_url)
+
+
+class OrderListView(ListView):
+    """View вывод списка заказов из модели Order"""
+    queryset = Order.objects.select_related('user').prefetch_related('products')
+
+
+class OrderDetailView(DetailView):
+    """View вывод детального описания заказа"""
+    queryset = Order.objects.select_related('user').prefetch_related('products')
+
+
+class OrderUpdateView(UpdateView):
+    """View Обновление заказа"""
+    model = Order
+    form_class = OrderForm
+    template_name_suffix = '_update_form'
+
+    def get_success_url(self):
+        return reverse('shopapp:order_detail', kwargs={'pk': self.object.pk})
+
+
+class OrderDeleteView(DeleteView):
+    """View Удаление заказа"""
+    model = Order
+    success_url = reverse_lazy('shopapp:orders')
+
+
+class OrderCreateView(CreateView):
+    """View Создание заказа"""
+    form_class = OrderForm
+    template_name = 'shopapp/order_create.html'
+    success_url = reverse_lazy('shopapp:orders')
+

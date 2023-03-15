@@ -1,5 +1,5 @@
 from django import forms
-from django.contrib.auth.models import User
+from django.contrib.auth.models import Group
 from django.core import validators
 from django.utils.translation import gettext_lazy
 from .models import Product, Order
@@ -25,7 +25,7 @@ class OrderForm(forms.ModelForm):
     """Форма для модели Order"""
     class Meta:
         model = Order
-        fields = 'delivery_address', 'promocode', 'products',
+        fields = 'user', 'delivery_address', 'promocode', 'products',
         labels = {
             'delivery_address': gettext_lazy('Адрес доставки'),
             'products': gettext_lazy('Выберите один или несколько продуктов'),
@@ -39,3 +39,9 @@ class OrderForm(forms.ModelForm):
             'products': forms.CheckboxSelectMultiple,
         }
 
+
+class GroupForm(forms.ModelForm):
+    """Форма для добавления групп"""
+    class Meta:
+        model = Group
+        fields = 'name',
