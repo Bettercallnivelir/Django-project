@@ -1,9 +1,12 @@
+from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.views import LogoutView
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse_lazy
+from django.views.generic import TemplateView, CreateView
 
+from .models import Profile
 
 # def login_user(request: HttpRequest):
 #     if request.method == 'GET':
@@ -54,3 +57,21 @@ def get_session_view(request: HttpRequest) -> HttpResponse:
     """Чтение данных из сессии"""
     value = request.session.get('Session key', 'Empty')
     return HttpResponse(f'Value: {value}.')
+
+
+class AboutMeView(TemplateView):
+    template_name = 'myauth/about-me.html'
+
+
+class RegisterView(CreateView):
+    form_class = UserCreationForm
+    template_name = 'myauth/registration.html'
+    success_url = reverse_lazy('myauth:about_me')
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        Profile.objects.create(user=self.object)
+        user = form.save()
+        login(self.request, user)
+        return response
+

@@ -27,7 +27,7 @@ class ProductAdmin(admin.ModelAdmin, ExportAsCSVMixin):
     inlines = [
         OrderInline,
     ]
-    list_display = 'pk', 'name', 'price', 'description_short', 'archived'
+    list_display = 'pk', 'name', 'price', 'description_short', 'archived', 'created_by',
     list_display_links = 'name', 'pk'
     search_fields = ('name', 'price')
     # Секции для полей Product
