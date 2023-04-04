@@ -1,9 +1,10 @@
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.views import LogoutView
-from django.http import HttpRequest, HttpResponse
+from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse_lazy
+from django.views import View
 from django.views.generic import TemplateView, CreateView
 
 from .models import Profile
@@ -75,3 +76,7 @@ class RegisterView(CreateView):
         login(self.request, user)
         return response
 
+
+class FooBarView(View):
+    def get(self, request):
+        return JsonResponse({'foo': 'bar', 'x': '!!!'})

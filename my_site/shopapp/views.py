@@ -1,7 +1,7 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.models import Group, User
 from django.shortcuts import render, redirect, reverse, get_object_or_404
-from django.http import HttpResponse, HttpRequest, HttpResponseRedirect
+from django.http import HttpResponse, HttpRequest, HttpResponseRedirect, JsonResponse
 from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
@@ -141,3 +141,37 @@ class OrderCreateView(CreateView):
     form_class = OrderForm
     template_name = 'shopapp/order_create.html'
     success_url = reverse_lazy('shopapp:orders')
+
+
+class ProductsDataExportView(View):
+    def get(self, request) -> JsonResponse:
+        products = Product.objects.order_by('pk')
+        products_data = [
+            {
+                'pk': product.pk,
+                'name': product.name,
+                'price': product.price,
+                'archived': product.archived,
+            }
+            for product in products
+        ]
+        return JsonResponse({'products': products_data})
+
+
+class OrdersDataExportView(UserPassesTestMixin, View):
+    def get(self, request) -> JsonResponse:
+        orders = Order.objects.select_related('user').prefetch_related('products')
+        orders_data = [
+            {
+                'pk': order.pk,
+                'promocode': order.promocode,
+                'user': order.user.username,
+                'products': [product.pk for product in order.products.all()]
+            }
+            for order in orders
+        ]
+        return JsonResponse({'orders': orders_data})
+
+    def test_func(self):
+        """Проверка пользователя на уровень доступа staff"""
+        return self.request.user.is_staff
