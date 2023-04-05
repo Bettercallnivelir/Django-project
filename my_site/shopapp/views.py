@@ -51,7 +51,7 @@ class ProductListView(ListView):
     """View списка продуктов"""
     model = Product
     context_object_name = 'products'
-    queryset = Product.objects.filter(archived=False)
+    queryset = Product.objects.filter(archived=True)
 
 
 class CreateProductView(PermissionRequiredMixin, View):

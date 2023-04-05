@@ -70,14 +70,18 @@ class ProductDetailsViewTestCase(TestCase):
 class ProductsListViewTestCase(TestCase):
     fixtures = [
         'products-fixture.json',
+        'users-fixture.json',
+        'group-fixture.json',
     ]
 
     @classmethod
     def setUpClass(cls):
+        super().setUpClass()
         cls.user = User.objects.create_user(username='Vtest', password='test111')
 
     @classmethod
     def tearDownClass(cls):
+        super().tearDownClass()
         cls.user.delete()
 
     def setUp(self) -> None:
@@ -86,7 +90,7 @@ class ProductsListViewTestCase(TestCase):
     def test_products_list(self):
         response = self.client.get(reverse('shopapp:products'))
         self.assertQuerysetEqual(
-            qs=Product.objects.filter(archived=True),
+            qs=list(Product.objects.filter(archived=True).all()),
             values=(p.pk for p in response.context['products']),
             transform=lambda p: p.pk,
         )
@@ -121,6 +125,7 @@ class ProductsExportViewTestCase(TestCase):
     fixtures = [
         'products-fixture.json',
         'users-fixture.json',
+        'group-fixture.json',
     ]
 
     def test_get_products_view(self):
@@ -178,16 +183,21 @@ class OrderDetailViewTestCase(TestCase):
 class OrdersExportTestCase(TestCase):
     fixtures = [
         "order-fixture.json",
+        'users-fixture.json',
+        'group-fixture.json',
+        'products-fixture.json',
     ]
 
     @classmethod
     def setUpClass(cls):
         """Создаём пользователя и даём статус staff"""
+        super().setUpClass()
         cls.credentials = dict(username='Some user', password='test123', is_staff=True)
         cls.user = User.objects.create_user(**cls.credentials)
 
     @classmethod
     def tearDownClass(cls):
+        super().tearDownClass()
         cls.user.delete()
 
     def setUp(self) -> None:
