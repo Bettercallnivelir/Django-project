@@ -5,9 +5,11 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse_lazy
 from django.views import View
-from django.views.generic import TemplateView, CreateView
+from django.views.generic import TemplateView, CreateView, ListView, DetailView
 
+from .forms import ProfileForm
 from .models import Profile
+
 
 # def login_user(request: HttpRequest):
 #     if request.method == 'GET':
@@ -61,7 +63,23 @@ def get_session_view(request: HttpRequest) -> HttpResponse:
 
 
 class AboutMeView(TemplateView):
-    template_name = 'myauth/about-me.html'
+    """Класс для вывода информации самого пользователя"""
+
+    def get(self, request: HttpRequest):
+        context = {
+            'form': ProfileForm()
+        }
+        return render(request, 'myauth/about-me.html', context=context)
+
+    def post(self, request):
+        form = ProfileForm(request.POST, request.FILES)
+
+        if form.is_valid():
+            person = Profile.objects.get(pk=request.user.profile.pk)
+            person.avatar = form.cleaned_data['avatar']
+            person.save()
+
+        return redirect('myauth:about_me')
 
 
 class RegisterView(CreateView):
@@ -80,3 +98,38 @@ class RegisterView(CreateView):
 class FooBarView(View):
     def get(self, request):
         return JsonResponse({'foo': 'bar', 'x': '!!!'})
+
+
+class UserListVIew(ListView):
+    """Класс для вывода списка пользователей(ссылками)"""
+    model = Profile
+    context_object_name = 'users'
+    template_name = 'myauth/user_list.html'
+
+
+class UserView(DetailView):
+    """Класс для вывода информации конкретного пользователя"""
+    template_name = 'myauth/about_user.html'
+    model = Profile
+    context_object_name = 'user'
+    pk_url_kwarg = 'user_id'
+
+    def get_context_data(self, **kwargs):
+        """Если пользователь staff, то предаём форму для смены аватарки"""
+        context = super().get_context_data(**kwargs)
+        if self.request.user.is_staff:
+            form = ProfileForm
+            context['form'] = form
+            return context
+        return context
+
+    def post(self, request, **kwargs):
+        """Меняем аватарку для выбранного пользователя"""
+        form = ProfileForm(request.POST, request.FILES)
+
+        if form.is_valid():
+            person = Profile.objects.get(pk=kwargs['user_id'])
+            person.avatar = form.cleaned_data['avatar']
+            person.save()
+
+        return redirect('myauth:about_user', kwargs['user_id'])

@@ -7,7 +7,7 @@ from django.views import View
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
 from shopapp.forms import ProductForm, OrderForm, GroupForm
-from shopapp.models import Product, Order
+from shopapp.models import Product, Order, ProductImage
 
 # Create your views here.
 url_names = ['index', 'groups', 'products', 'orders']
@@ -43,8 +43,9 @@ class GroupsListView(View):
 
 class ProductsDetailsView(DetailView):
     """View детальное описание продукта"""
-    model = Product
+    # model = Product
     template_name = 'shopapp/product-details.html'
+    queryset = Product.objects.prefetch_related('images')
 
 
 class ProductListView(ListView):
@@ -79,8 +80,9 @@ class CreateProductView(PermissionRequiredMixin, View):
 class ProductUpdateView(UserPassesTestMixin, UpdateView):
     """View Обновление деталей продукта"""
     model = Product
-    fields = 'name', 'price'
+    # fields = 'name', 'price', 'preview',
     template_name_suffix = '_update_form'
+    form_class = ProductForm
 
     def test_func(self):
         """Проверка прав на изменение продукта"""
@@ -93,6 +95,15 @@ class ProductUpdateView(UserPassesTestMixin, UpdateView):
 
     def get_success_url(self):
         return reverse('shopapp:detail_product', kwargs={'pk': self.object.pk})
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        for image in form.files.getlist('images'):
+            ProductImage.objects.create(
+                product=self.object,
+                image=image,
+            )
+        return response
 
 
 class ProductDeleteView(DeleteView):

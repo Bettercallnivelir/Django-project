@@ -18,7 +18,11 @@ class ProductForm(forms.ModelForm):
     """Форма для модели Product"""
     class Meta:
         model = Product
-        fields = 'name', 'price', 'descriptions', 'discount'
+        fields = 'name', 'price', 'descriptions', 'discount', 'preview'
+
+    images = forms.ImageField(
+        widget=forms.ClearableFileInput(attrs={"multiple": True}),
+    )
 
 
 class OrderForm(forms.ModelForm):

@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block body %}
-<h1>User info</h1>
+  <h1>User info</h1>
   {% if user.is_authenticated %}
     <h2>Details:</h2>
     <p>Username: {{ user.username }}</p>
@@ -13,8 +13,19 @@
     <p>Lastname: {{ user.last_name }}</p>
     <p>Email: {{ user.email }}</p>
     <p>Bio: {{ user.profile.bio }}</p>
+    {% if user.profile.avatar %}
+      <img src="{{ user.profile.avatar.url }}" alt="">
     {% else %}
+      <p>Нет аватара.</p>
+    {% endif %}
+    <form action="" method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit">Загрузить аватарку</button>
+    </form>
+  {% else %}
     <h2>Unknown user</h2>
-  
-  {% endif %} 
+
+
+  {% endif %}
 {% endblock %}
