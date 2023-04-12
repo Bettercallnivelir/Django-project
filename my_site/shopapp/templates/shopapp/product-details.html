@@ -11,6 +11,22 @@
     <p>Price: <em>{{ object.price }}</em></p>
     <p>Discount: <em>{{ pobject.discount }}</em></p>
     <p>Archived: <em>{{ object.archived }}</em></p>
+    {% if product.preview %}
+      <img src="{{ product.preview.url }}" alt="{{ product.preview.name }}">
+    {% endif %}
+    <h3>Images:</h3>
+    <div>
+      {% for image in object.images.all %}
+        <div>
+          <img src="{{ image.image.url }}" alt="{{ image.image.name }}">
+          <div>{{ image.description }}</div>
+        </div>
+      {% empty %}
+        <div>No images</div>
+
+      {% endfor %}
+
+    </div>
   </div>
   <br>
   <div>

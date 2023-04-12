@@ -1,0 +1,30 @@
+{% extends 'myauth/base.html' %}
+
+{% block title %}
+  About user
+{% endblock %}
+
+{% block body %}
+  <h1>User info: {{ user.user }} </h1>
+  <p>Username: {{ user.user.username }}</p>
+  <p>Firstname: {{ user.user.first_name }}</p>
+  <p>Lastname: {{ user.user.last_name }}</p>
+  <p>Email: {{ user.user.email }}</p>
+  <p>Bio: {{ user.bio }}</p>
+  {% if user.avatar %}
+    <img src="{{ user.avatar.url }}" alt="">
+  {% else %}
+    <p>Нет аватара.</p>
+  {% endif %}
+  {% if form %}
+    <form action="" method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+
+      {{ form.as_p }}
+      <button type="submit">Загрузить аватарку</button>
+    </form>
+  {% endif %}
+
+
+
+{% endblock %}
