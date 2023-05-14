@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
+from django.utils.translation import gettext_lazy as _, ngettext
 
 
 def product_preview_directory_path(instance: 'Product', filename: str) -> str:
@@ -25,6 +26,10 @@ class Product(models.Model):
     #         return self.descriptions
     #     return self.descriptions[:40] + '...'
 
+    class Meta:
+        verbose_name = _('product')
+        verbose_name_plural = _('products')
+
 
 def product_images_directory_path(instance: 'ProductImage', filename: str) -> str:
     return f'products/product_{instance.product.pk}/{filename}'
@@ -46,3 +51,7 @@ class Order(models.Model):
 
     def __str__(self):
         return f'Заказ №{self.pk}-{self.delivery_address}'
+
+    class Meta:
+        verbose_name = _('Order')
+        verbose_name_plural = _('Orders')

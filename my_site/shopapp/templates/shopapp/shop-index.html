@@ -15,12 +15,17 @@ Shop index
     {% empty %}
       No urls
     {% endfor %}
-
   </ul>
 </div>
 
 <div>
   {% lorem 3 p random %}
 </div>
+
+  <div>
+  <strong>
+    You have {{ items }} cherr{{ items|pluralize:'y,ies' }}
+  </strong>
+  </div>
 
 {% endblock %}

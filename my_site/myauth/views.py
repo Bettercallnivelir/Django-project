@@ -6,6 +6,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import TemplateView, CreateView, ListView, DetailView
+from django.utils.translation import gettext_lazy as _, ngettext
 
 from .forms import ProfileForm
 from .models import Profile
@@ -30,6 +31,21 @@ from .models import Profile
 # def logout_user(request):
 #     logout(request)
 #     return redirect('/admin')
+
+class HelloView(View):
+    welcome_message = _('Hello world!')
+
+    def get(self, request):
+        items_str = request.GET.get('items') or 0
+        items = int(items_str)
+        products_line = ngettext(
+            'one product',
+            '{count} products',
+            items,
+        )
+        products_line = products_line.format(count=items)
+        return HttpResponse(f'<h1>{self.welcome_message}</h1>'
+                            f'\n<h2>{products_line}</h2>')
 
 
 class LogoutUser(LogoutView):

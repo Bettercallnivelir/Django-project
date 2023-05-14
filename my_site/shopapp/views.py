@@ -19,6 +19,7 @@ class ShopIndexView(View):
     def get(self, request: HttpRequest) -> HttpResponse:
         context = {
             'urls': url_names,
+            'items': 23,
         }
         return render(request, 'shopapp/shop-index.html', context=context)
 
