@@ -5,12 +5,43 @@ from django.http import HttpResponse, HttpRequest, HttpResponseRedirect, JsonRes
 from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from rest_framework.viewsets import ModelViewSet
+from rest_framework.filters import SearchFilter, OrderingFilter
+from django_filters.rest_framework import DjangoFilterBackend
 
 from shopapp.forms import ProductForm, OrderForm, GroupForm
 from shopapp.models import Product, Order, ProductImage
+from .serializers import ProductSerializer, OrderSerializer
 
 # Create your views here.
 url_names = ['index', 'groups', 'products', 'orders']
+
+
+class ProductViewSet(ModelViewSet):
+    """ViewSet для класса Product"""
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+    filter_backends = [
+        SearchFilter,
+        OrderingFilter,
+    ]
+    ordering_fields = ['name', 'price']
+    search_fields = ['name', 'descriptions']
+
+
+class OrderViewSet(ModelViewSet):
+    """ViewSet для класса Order"""
+    queryset = Order.objects.all()
+    serializer_class = OrderSerializer
+    filter_backends = [
+        DjangoFilterBackend,
+        OrderingFilter,
+    ]
+    filterset_fields = [
+        'delivery_address',
+        'created',
+    ]
+    ordering_fields = ['pk', 'created', 'user']
 
 
 class ShopIndexView(View):
