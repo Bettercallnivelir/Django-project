@@ -1,3 +1,9 @@
+"""
+Набор Views(представлений) для приложения shopapp.
+
+Разные view интернет магазина: по товарам, заказам и т.д.
+"""
+
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.models import Group, User
 from django.shortcuts import render, redirect, reverse, get_object_or_404
@@ -8,6 +14,7 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.filters import SearchFilter, OrderingFilter
 from django_filters.rest_framework import DjangoFilterBackend
+from drf_spectacular.utils import extend_schema, OpenApiResponse
 
 from shopapp.forms import ProductForm, OrderForm, GroupForm
 from shopapp.models import Product, Order, ProductImage
@@ -17,8 +24,12 @@ from .serializers import ProductSerializer, OrderSerializer
 url_names = ['index', 'groups', 'products', 'orders']
 
 
+@extend_schema(description='Product views CRUD')
 class ProductViewSet(ModelViewSet):
-    """ViewSet для класса Product"""
+    """
+    ViewSet для класса Product
+    Полный CRUD для сущности товара
+    """
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     filter_backends = [
@@ -27,6 +38,17 @@ class ProductViewSet(ModelViewSet):
     ]
     ordering_fields = ['name', 'price']
     search_fields = ['name', 'descriptions']
+
+    @extend_schema(
+        summary='Get one product by ID',
+        description='Retrieves **product**, returns 404 if not found',
+        responses={
+            200: ProductSerializer,
+            404: OpenApiResponse(description='Empty response, product by id not found'),
+        }
+    )
+    def retrieve(self, *args, **kwargs):
+        return super().retrieve(*args, **kwargs)
 
 
 class OrderViewSet(ModelViewSet):
