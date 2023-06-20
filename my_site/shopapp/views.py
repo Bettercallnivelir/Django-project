@@ -3,7 +3,7 @@
 
 Разные view интернет магазина: по товарам, заказам и т.д.
 """
-
+import logging
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.models import Group, User
 from django.shortcuts import render, redirect, reverse, get_object_or_404
@@ -22,6 +22,7 @@ from .serializers import ProductSerializer, OrderSerializer
 
 # Create your views here.
 url_names = ['index', 'groups', 'products', 'orders']
+log = logging.getLogger(__name__)
 
 
 @extend_schema(description='Product views CRUD')
@@ -74,6 +75,8 @@ class ShopIndexView(View):
             'urls': url_names,
             'items': 23,
         }
+        log.debug('Products for shop index: %s', context)
+        log.info('Rendering shop index')
         return render(request, 'shopapp/shop-index.html', context=context)
 
 
