@@ -9,7 +9,7 @@
   {% if object_list %}
     <div>
       {% for object in object_list %}
-        <h2>{{ object.title }}</h2>
+        <h2><a href="{% url 'blogapp:article' pk=object.pk %}">{{ object.title }}</a></h2>
         <p>Published: {{ object.pub_date }}</p>
         <p>Author: {{ object.author }}</p>
         <p>Category: {{ object.category }}</p>
@@ -20,11 +20,12 @@
           {% endfor %}
         </ul>
 
+
       {% endfor %}
     </div>
 
-    {#    {% else %}#}
-    {#    <h2>No articles yet!</h2>#}
+        {% else %}
+        <h2>No articles yet!</h2>
 
   {% endif %}
 {% endblock %}

@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
+from django.urls import reverse
 from django.utils.translation import gettext_lazy as _, ngettext
 
 
@@ -13,8 +14,8 @@ class Product(models.Model):
 
     Заказы: :model:`shopapp.Order`
     """
-    name = models.CharField(max_length=100)
-    descriptions = models.TextField(null=False, blank=True)
+    name = models.CharField(max_length=100, db_index=True)
+    descriptions = models.TextField(null=False, blank=True, db_index=True)
     price = models.DecimalField(default=0, max_digits=8, decimal_places=2)
     discount = models.SmallIntegerField(default=0)
     created = models.DateTimeField(auto_now_add=True)
@@ -24,6 +25,9 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name
+
+    def get_absolute_url(self):
+        return reverse('shopapp:detail_product', kwargs={'pk': self.pk})
 
     # @property
     # def description_short(self):

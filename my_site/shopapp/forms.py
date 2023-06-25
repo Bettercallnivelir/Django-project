@@ -16,6 +16,7 @@ from .models import Product, Order
 
 class ProductForm(forms.ModelForm):
     """Форма для модели Product"""
+
     class Meta:
         model = Product
         fields = 'name', 'price', 'descriptions', 'discount', 'preview'
@@ -27,6 +28,7 @@ class ProductForm(forms.ModelForm):
 
 class OrderForm(forms.ModelForm):
     """Форма для модели Order"""
+
     class Meta:
         model = Order
         fields = 'user', 'delivery_address', 'promocode', 'products',
@@ -49,3 +51,8 @@ class GroupForm(forms.ModelForm):
     class Meta:
         model = Group
         fields = 'name',
+
+
+class CSVImportForm(forms.Form):
+    """Класс формы для загрузки файла"""
+    csv_file = forms.FileField()
