@@ -69,6 +69,7 @@ INSTALLED_APPS = [
     'myapiapp.apps.MyapiappConfig',
     'blogapp.apps.BlogappConfig',
     'debug_toolbar',
+    'django.contrib.sitemaps'
 ]
 
 MIDDLEWARE = [
