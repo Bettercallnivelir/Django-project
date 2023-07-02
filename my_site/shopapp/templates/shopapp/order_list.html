@@ -1,13 +1,16 @@
 {% extends 'shopapp/base.html' %}
+{% load cache %}
 
 {% block title %}
   Orders list
 {% endblock %}
 
 {% block body %}
-  <h1>Orders:</h1>
+
   {% if object_list %}
+    <h1>Пользователь {{ owner }}  выполнил следующие заказы:</h1>
     <div>
+      {% cache 20 user_orders owner.username %}
       {% for order in object_list %}
         <p><a href="{% url 'shopapp:order_detail' order.pk %}">Order #{{ order.pk }}</a></p>
         <p>Order by: {% firstof order.user.username order.user.first_name %}</p>
@@ -20,10 +23,10 @@
         </ul>
         <br>
       {% endfor %}
-
+      {% endcache %}
     </div>
   {% else %}
-    <h2>No orders!</h2>
+    <h2>У пользователя {{ owner }} ещё нет заказов</h2>
   {% endif %}
   <div>
     <a href="{% url 'shopapp:create_order' %}"><b>Оформить заказ!</b></a>

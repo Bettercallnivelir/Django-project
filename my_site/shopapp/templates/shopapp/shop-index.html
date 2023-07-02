@@ -1,4 +1,5 @@
 {% extends 'shopapp/base.html' %}
+{% load cache %}
 
 {% block title %}
 Shop index
@@ -18,9 +19,11 @@ Shop index
   </ul>
 </div>
 
+  {% cache 35 lorem %}
 <div>
   {% lorem 3 p random %}
 </div>
+  {% endcache %}
 
   <div>
   <strong>

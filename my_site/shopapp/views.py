@@ -11,7 +11,10 @@ from django.contrib.syndication.views import Feed
 from django.shortcuts import render, redirect, reverse, get_object_or_404
 from django.http import HttpResponse, HttpRequest, HttpResponseRedirect, JsonResponse
 from django.urls import reverse_lazy
+from django.core.cache import cache
+from django.utils.decorators import method_decorator
 from django.views import View
+from django.views.decorators.cache import cache_page
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from rest_framework.request import Request
 from rest_framework.parsers import MultiPartParser
@@ -58,6 +61,11 @@ class ProductViewSet(ModelViewSet):
     def retrieve(self, *args, **kwargs):
         return super().retrieve(*args, **kwargs)
 
+    @method_decorator(cache_page(60))
+    def list(self, *args, **kwargs):
+        print('CACHED')
+        return super().list(*args, **kwargs)
+
     @action(methods=['get'], detail=False)
     def download_csv(self, request: Request):
         response = HttpResponse(content_type='text/csv')
@@ -73,7 +81,7 @@ class ProductViewSet(ModelViewSet):
         queryset = queryset.only(*fields)
         writer = DictWriter(response, fieldnames=fields)
         writer.writeheader()
-        
+
         for product in queryset:
             writer.writerow({
                 field: getattr(product, field)
@@ -121,6 +129,7 @@ class ShopIndexView(View):
         }
         log.debug('Products for shop index: %s', context)
         log.info('Rendering shop index')
+        print('shop index context', context)
         return render(request, 'shopapp/shop-index.html', context=context)
 
 
@@ -257,16 +266,20 @@ class OrderCreateView(CreateView):
 
 class ProductsDataExportView(View):
     def get(self, request) -> JsonResponse:
-        products = Product.objects.order_by('pk')
-        products_data = [
-            {
-                'pk': product.pk,
-                'name': product.name,
-                'price': product.price,
-                'archived': product.archived,
-            }
-            for product in products
-        ]
+        cache_key = 'Products_data_export'
+        products_data = cache.get(cache_key)
+        if products_data is None:
+            products = Product.objects.order_by('pk')
+            products_data = [
+                {
+                    'pk': product.pk,
+                    'name': product.name,
+                    'price': product.price,
+                    'archived': product.archived,
+                }
+                for product in products
+            ]
+            cache.set('Products_data_export', products_data, 300)
         return JsonResponse({'products': products_data})
 
 
@@ -302,3 +315,38 @@ class LatestProductsFeed(Feed):
 
     def item_description(self, item: Product):
         return item.descriptions[:100]
+
+
+class UserOrdersListView(LoginRequiredMixin, ListView):
+    """View списка заказов определенного пользователя"""
+    login_url = reverse_lazy('myauth:login')
+    owner = None
+
+    def get_queryset(self):
+        self.owner = get_object_or_404(User, id=self.kwargs['user_id'])
+        orders = Order.objects.select_related('user').filter(user=self.owner.pk).prefetch_related('products')
+        return orders
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['owner'] = self.owner
+        return context
+
+
+def export_orders(request: HttpRequest, user_id):
+    """Функция экспорта данных о заказе выбранного пользователя с кэшированием"""
+    owner = get_object_or_404(User, id=user_id)
+    cache_key = f'Orders_data_export_for_user_{owner.pk}'
+    orders_data = cache.get(cache_key)
+    if orders_data is None:
+        orders = Order.objects.select_related('user').filter(user=owner.pk).prefetch_related('products')
+        orders_data = [
+            {
+                'pk': order.pk,
+                'promocode': order.promocode,
+                'products': [product.name for product in order.products.all()]
+            }
+            for order in orders
+        ]
+        cache.set(cache_key, orders_data, 300)
+    return JsonResponse({'orders': orders_data})
