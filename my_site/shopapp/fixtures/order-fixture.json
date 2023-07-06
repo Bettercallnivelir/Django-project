@@ -1,0 +1,131 @@
+[
+  {
+    "model": "shopapp.order",
+    "pk": 1,
+    "fields": {
+      "delivery_address": "Baker str.45",
+      "promocode": "extra",
+      "created": "2023-02-25T14:34:05.815Z",
+      "user": 1,
+      "products": [
+        1,
+        2,
+        3
+      ]
+    }
+  },
+  {
+    "model": "shopapp.order",
+    "pk": 2,
+    "fields": {
+      "delivery_address": "",
+      "promocode": "",
+      "created": "2023-03-08T14:44:51.798Z",
+      "user": 1,
+      "products": [
+        9
+      ]
+    }
+  },
+  {
+    "model": "shopapp.order",
+    "pk": 3,
+    "fields": {
+      "delivery_address": "",
+      "promocode": "",
+      "created": "2023-03-08T14:45:50.622Z",
+      "user": 1,
+      "products": [
+        1,
+        3,
+        4
+      ]
+    }
+  },
+  {
+    "model": "shopapp.order",
+    "pk": 4,
+    "fields": {
+      "delivery_address": "",
+      "promocode": "",
+      "created": "2023-03-08T15:22:59.127Z",
+      "user": 1,
+      "products": [
+        4
+      ]
+    }
+  },
+  {
+    "model": "shopapp.order",
+    "pk": 5,
+    "fields": {
+      "delivery_address": "13 GrSR",
+      "promocode": "",
+      "created": "2023-03-08T17:42:44.731Z",
+      "user": 1,
+      "products": [
+        3,
+        17
+      ]
+    }
+  },
+  {
+    "model": "shopapp.order",
+    "pk": 6,
+    "fields": {
+      "delivery_address": "45 NY",
+      "promocode": "",
+      "created": "2023-03-08T18:21:02.236Z",
+      "user": 1,
+      "products": [
+        1,
+        4,
+        5
+      ]
+    }
+  },
+  {
+    "model": "shopapp.order",
+    "pk": 7,
+    "fields": {
+      "delivery_address": "34 str 1",
+      "promocode": "X!",
+      "created": "2023-03-08T18:33:05.692Z",
+      "user": 1,
+      "products": [
+        26
+      ]
+    }
+  },
+  {
+    "model": "shopapp.order",
+    "pk": 8,
+    "fields": {
+      "delivery_address": "industr",
+      "promocode": "Emmet",
+      "created": "2023-03-09T10:21:55.922Z",
+      "user": 1,
+      "products": [
+        4
+      ]
+    }
+  },
+  {
+    "model": "shopapp.order",
+    "pk": 10,
+    "fields": {
+      "delivery_address": "low str.12",
+      "promocode": "",
+      "created": "2023-03-14T19:40:01.592Z",
+      "user": 1,
+      "products": [
+        1,
+        2,
+        3,
+        24,
+        25,
+        26
+      ]
+    }
+  }
+]

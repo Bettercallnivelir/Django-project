@@ -1,0 +1,43 @@
+[
+  {
+    "model": "auth.group",
+    "pk": 1,
+    "fields": {
+      "name": "exampple_gr",
+      "permissions": [
+        9,
+        10,
+        11,
+        12
+      ]
+    }
+  },
+  {
+    "model": "auth.group",
+    "pk": 2,
+    "fields": {
+      "name": "fun_group",
+      "permissions": [
+        12
+      ]
+    }
+  },
+  {
+    "model": "auth.group",
+    "pk": 3,
+    "fields": {
+      "name": "some_gr",
+      "permissions": []
+    }
+  },
+  {
+    "model": "auth.group",
+    "pk": 4,
+    "fields": {
+      "name": "profile_manager",
+      "permissions": [
+        36
+      ]
+    }
+  }
+]

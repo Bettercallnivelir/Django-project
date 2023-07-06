@@ -1,0 +1,262 @@
+[
+  {
+    "model": "shopapp.product",
+    "pk": 1,
+    "fields": {
+      "name": "Laptop",
+      "descriptions": "ffdfsdg",
+      "price": "780.00",
+      "discount": 0,
+      "created": "2023-02-25T12:43:30.394Z",
+      "archived": false,
+      "created_by": 1
+    }
+  },
+  {
+    "model": "shopapp.product",
+    "pk": 2,
+    "fields": {
+      "name": "Desktop",
+      "descriptions": "",
+      "price": "1480.00",
+      "discount": 10,
+      "created": "2023-02-25T12:43:30.394Z",
+      "archived": true,
+      "created_by": 1
+    }
+  },
+  {
+    "model": "shopapp.product",
+    "pk": 3,
+    "fields": {
+      "name": "Phone",
+      "descriptions": "asdfsdfs sjdfb;sdkbf asndf whefrw fdf",
+      "price": "599.00",
+      "discount": 15,
+      "created": "2023-02-25T12:43:30.394Z",
+      "archived": true,
+      "created_by": 1
+    }
+  },
+  {
+    "model": "shopapp.product",
+    "pk": 4,
+    "fields": {
+      "name": "TV",
+      "descriptions": "smart",
+      "price": "99.00",
+      "discount": 0,
+      "created": "2023-03-06T18:16:01.754Z",
+      "archived": false,
+      "created_by": 1
+    }
+  },
+  {
+    "model": "shopapp.product",
+    "pk": 5,
+    "fields": {
+      "name": "PhoneX",
+      "descriptions": "greate phone!",
+      "price": "23.46",
+      "discount": 0,
+      "created": "2023-03-08T11:31:25.043Z",
+      "archived": false,
+      "created_by": 1
+    }
+  },
+  {
+    "model": "shopapp.product",
+    "pk": 6,
+    "fields": {
+      "name": "P",
+      "descriptions": "",
+      "price": "0.00",
+      "discount": 0,
+      "created": "2023-03-08T13:03:19.612Z",
+      "archived": false,
+      "created_by": 1
+    }
+  },
+  {
+    "model": "shopapp.product",
+    "pk": 7,
+    "fields": {
+      "name": "PhoneXL",
+      "descriptions": "new phone",
+      "price": "12.44",
+      "discount": 46,
+      "created": "2023-03-08T13:04:03.372Z",
+      "archived": false,
+      "created_by": 1
+    }
+  },
+  {
+    "model": "shopapp.product",
+    "pk": 8,
+    "fields": {
+      "name": "Tablet",
+      "descriptions": "Super tablet",
+      "price": "999.00",
+      "discount": 12,
+      "created": "2023-03-08T13:08:51.700Z",
+      "archived": false,
+      "created_by": 1
+    }
+  },
+  {
+    "model": "shopapp.product",
+    "pk": 9,
+    "fields": {
+      "name": "Laptop 2",
+      "descriptions": "",
+      "price": "0.00",
+      "discount": 0,
+      "created": "2023-03-08T13:44:55.621Z",
+      "archived": false,
+      "created_by": 1
+    }
+  },
+  {
+    "model": "shopapp.product",
+    "pk": 14,
+    "fields": {
+      "name": "Є°╕·°",
+      "descriptions": "Single Malt",
+      "price": "78.00",
+      "discount": 0,
+      "created": "2023-03-12T05:13:53.597Z",
+      "archived": false,
+      "created_by": 1
+    }
+  },
+  {
+    "model": "shopapp.product",
+    "pk": 17,
+    "fields": {
+      "name": "Bulliet",
+      "descriptions": "Single Malt",
+      "price": "47.00",
+      "discount": 0,
+      "created": "2023-03-12T05:18:33.917Z",
+      "archived": false,
+      "created_by": 1
+    }
+  },
+  {
+    "model": "shopapp.product",
+    "pk": 18,
+    "fields": {
+      "name": "Tv -44",
+      "descriptions": "sdgsdagfg asdgasdgf",
+      "price": "489.00",
+      "discount": 0,
+      "created": "2023-03-12T05:19:22.140Z",
+      "archived": true,
+      "created_by": 1
+    }
+  },
+  {
+    "model": "shopapp.product",
+    "pk": 19,
+    "fields": {
+      "name": "Tv -44 LSD",
+      "descriptions": "sdgsdagfg asdgasdgf",
+      "price": "399.00",
+      "discount": 0,
+      "created": "2023-03-12T05:20:25.024Z",
+      "archived": false,
+      "created_by": 1
+    }
+  },
+  {
+    "model": "shopapp.product",
+    "pk": 21,
+    "fields": {
+      "name": "Tv -44",
+      "descriptions": "sdgsdagfg asdgasdgf",
+      "price": "489.00",
+      "discount": 0,
+      "created": "2023-03-12T05:21:11.007Z",
+      "archived": true,
+      "created_by": 1
+    }
+  },
+  {
+    "model": "shopapp.product",
+    "pk": 22,
+    "fields": {
+      "name": "Tv -44",
+      "descriptions": "sdgsdagfg asdgasdgf",
+      "price": "489.00",
+      "discount": 0,
+      "created": "2023-03-12T05:21:57.133Z",
+      "archived": true,
+      "created_by": 1
+    }
+  },
+  {
+    "model": "shopapp.product",
+    "pk": 23,
+    "fields": {
+      "name": "Wiskey",
+      "descriptions": "Single malt",
+      "price": "458.00",
+      "discount": 0,
+      "created": "2023-03-12T05:23:47.517Z",
+      "archived": false,
+      "created_by": 1
+    }
+  },
+  {
+    "model": "shopapp.product",
+    "pk": 24,
+    "fields": {
+      "name": "gsdf ",
+      "descriptions": "sdfsdf 23423 4",
+      "price": "5.00",
+      "discount": 0,
+      "created": "2023-03-14T16:44:03.659Z",
+      "archived": false,
+      "created_by": 1
+    }
+  },
+  {
+    "model": "shopapp.product",
+    "pk": 25,
+    "fields": {
+      "name": "xxzz",
+      "descriptions": "super ultrra",
+      "price": "3.99",
+      "discount": 5,
+      "created": "2023-03-14T16:48:34.739Z",
+      "archived": false,
+      "created_by": 1
+    }
+  },
+  {
+    "model": "shopapp.product",
+    "pk": 26,
+    "fields": {
+      "name": "fff21h",
+      "descriptions": "",
+      "price": "15.00",
+      "discount": 0,
+      "created": "2023-03-14T16:49:40.574Z",
+      "archived": false,
+      "created_by": 1
+    }
+  },
+  {
+    "model": "shopapp.product",
+    "pk": 27,
+    "fields": {
+      "name": "тхс",
+      "descriptions": "Django",
+      "price": "420.00",
+      "discount": 0,
+      "created": "2023-03-27T17:59:58.249Z",
+      "archived": false,
+      "created_by": 5
+    }
+  }
+]

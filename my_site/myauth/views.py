@@ -1,3 +1,5 @@
+from random import random
+
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.views import LogoutView
 from django.http import HttpRequest, HttpResponse, JsonResponse
@@ -7,6 +9,7 @@ from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import TemplateView, CreateView, ListView, DetailView
 from django.utils.translation import gettext_lazy as _, ngettext
+from django.views.decorators.cache import cache_page
 
 from .forms import ProfileForm
 from .models import Profile
@@ -60,10 +63,11 @@ def set_cookie_view(request: HttpRequest) -> HttpResponse:
     return response
 
 
+@cache_page(60)
 def get_cookie_view(request: HttpRequest) -> HttpResponse:
     """Чтение данных из cookies"""
     value = request.COOKIES.get('Key', 'default')
-    return HttpResponse(f'Answer: {value!r}')
+    return HttpResponse(f'Answer: {value!r} + {random()}')
 
 
 def set_session_view(request: HttpRequest) -> HttpResponse:
